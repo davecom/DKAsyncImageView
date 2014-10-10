@@ -3,7 +3,7 @@ DKAsyncImageView
 
 DKAsyncImageView is a Swift subclass of NSImageView for loading remote images asynchronously and displaying them on OS X.
 
-This class is a port of PVAsyncImageView(https://github.com/pedrovieira7/PVAsyncImageView) by @pedrovieira7 from Objective-C to Swift. The features are the same, and re-enumerated here.
+This class is a port of [PVAsyncImageView](https://github.com/pedrovieira7/PVAsyncImageView) by [@pedrovieira7] from Objective-C to Swift. The features are the same, and re-enumerated here.
 
 Features
 ----------------
