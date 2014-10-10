@@ -40,8 +40,10 @@ class DKAsyncImageView: NSImageView, NSURLConnectionDelegate, NSURLConnectionDat
     private var toolTipWhenFinished: String = ""
     private var toolTipWhenFinishedWithError: String = ""
     
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+    dynamic var url: String = "" {  //settable from KVC
+        didSet {
+            self.downloadImageFromURL(url)
+        }
     }
     
     func downloadImageFromURL(url: String) {
@@ -67,6 +69,7 @@ class DKAsyncImageView: NSImageView, NSURLConnectionDelegate, NSURLConnectionDat
         self.errorImage = errorImage
         imageDownloadData = NSMutableData()
         
+        self.url = url
         var URL = NSURL(string: url)
         
         if URL == nil {
