@@ -32,9 +32,9 @@ class DKAsyncImageView: NSImageView, NSURLConnectionDelegate, NSURLConnectionDat
     private var spinningWheel: NSProgressIndicator?
     private var trackingArea: NSTrackingArea?
     
-    private var isLoadingImage: Bool = false
-    private var userDidCancel: Bool = false
-    private var didFailLoadingImage: Bool = false
+    var isLoadingImage: Bool = false
+    var userDidCancel: Bool = false
+    var didFailLoadingImage: Bool = false
     
     private var toolTipWhileLoading: String = ""
     private var toolTipWhenFinished: String = ""
@@ -89,7 +89,16 @@ class DKAsyncImageView: NSImageView, NSURLConnectionDelegate, NSURLConnectionDat
                     spinningWheel.startAnimation(self)
                 }
                 
-            } else if 
+            } else if (self.frame.size.height < 64 && self.frame.size.height >= 16) && (self.frame.size.width < 64 && self.frame.size.width >= 16) {
+                spinningWheel = NSProgressIndicator()
+                if let spinningWheel = spinningWheel {
+                    addSubview(spinningWheel)
+                    spinningWheel.displayedWhenStopped = false
+                    spinningWheel.frame = NSMakeRect(self.frame.size.width * 0.5 - 8, self.frame.size.height * 0.5 - 8, 16, 16)
+                    spinningWheel.controlSize = NSControlSize.SmallControlSize
+                    spinningWheel.startAnimation(self)
+                }
+            }
         }
     }
     
@@ -110,10 +119,103 @@ class DKAsyncImageView: NSImageView, NSURLConnectionDelegate, NSURLConnectionDat
         image = nil
     }
     
+    func failureReset() {
+        isLoadingImage = false
+        didFailLoadingImage = true
+        userDidCancel = false
+        
+        spinningWheel?.stopAnimation(self)
+        spinningWheel?.removeFromSuperview()
+        
+        imageDownloadData = nil
+        imageURLConnection = nil
+        
+        image = errorImage
+        errorImage = nil
+    }
+    
+    //MARK: NSURLConnectionDelegate Methods
+    
+    func connection(connection: NSURLConnection, didReceiveData data: NSData) {
+        imageDownloadData?.appendData(data)
+    }
+    
+    func connection(connection: NSURLConnection, didFailWithError error: NSError) {
+        failureReset()
+    }
+    
+    func connectionDidFinishLoading(connection: NSURLConnection) {
+        didFailLoadingImage = false
+        userDidCancel = false
+        
+        if let data = imageDownloadData {
+            if let img: NSImage = NSImage(data: data) {
+                image = img
+                isLoadingImage = false
+                
+                spinningWheel?.stopAnimation(self)
+                spinningWheel?.removeFromSuperview()
+                imageDownloadData = nil
+                imageURLConnection = nil
+                errorImage = nil
+            } else  {
+                failureReset()
+            }
+        } else {
+            failureReset()
+        }
+    }
+    
+    //MARK: Tooltips
+    
+    func setToolTipWhileLoading(ttip1: String, whenFinished ttip2:String, andWhenFinishedWithError ttip3: String) {
+        toolTipWhileLoading = ttip1
+        toolTipWhenFinished = ttip2
+        toolTipWhenFinishedWithError = ttip3
+    }
+    
     func deleteToolTips() {
         toolTip = ""
         toolTipWhileLoading = ""
         toolTipWhenFinished = ""
         toolTipWhenFinishedWithError = ""
+    }
+    
+    override func mouseEntered(theEvent: NSEvent) {
+        if !userDidCancel {  // the user didn't cancel the operation so show the tooltips
+            if isLoadingImage {
+                if toolTipWhileLoading != "" {
+                    toolTip = toolTipWhileLoading
+                } else {
+                    toolTip = ""
+                }
+            }
+        } else if didFailLoadingImage {  //connection failed
+            if toolTipWhenFinishedWithError != "" {
+                toolTip = toolTipWhenFinishedWithError
+            } else {
+                toolTip = ""
+            }
+        }
+        else if !self.isLoadingImage { // it's not loading image
+            if toolTipWhenFinished != "" {
+                toolTip = toolTipWhenFinished
+            } else {
+                toolTip = ""
+            }
+        }
+    }
+    
+    override func updateTrackingAreas() {
+        if let trackingArea = trackingArea {
+            removeTrackingArea(trackingArea)
+        }
+        
+        let opts: NSTrackingAreaOptions = NSTrackingAreaOptions(NSTrackingAreaOptions.MouseEnteredAndExited.rawValue | NSTrackingAreaOptions.ActiveAlways.rawValue)
+        trackingArea = NSTrackingArea(rect: self.bounds, options: opts, owner: self, userInfo: nil)
+        if let trackingArea = trackingArea {
+            self.addTrackingArea(trackingArea)
+        }
+        
     }
 }
