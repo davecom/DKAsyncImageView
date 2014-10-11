@@ -36,16 +36,12 @@ class DKAsyncImageView: NSImageView, NSURLConnectionDelegate, NSURLConnectionDat
     var userDidCancel: Bool = false
     var didFailLoadingImage: Bool = false
     
-    private var toolTipWhileLoading: String = ""
-    private var toolTipWhenFinished: String = ""
-    private var toolTipWhenFinishedWithError: String = ""
+    private var toolTipWhileLoading: String?
+    private var toolTipWhenFinished: String?
+    private var toolTipWhenFinishedWithError: String?
     
-    dynamic var url: String = "" {  //settable from KVC
-        didSet {
-            if (oldValue != url) {
-                self.downloadImageFromURL(url)
-            }
-        }
+    deinit {
+        cancelDownload()
     }
     
     func downloadImageFromURL(url: String) {
@@ -71,7 +67,6 @@ class DKAsyncImageView: NSImageView, NSURLConnectionDelegate, NSURLConnectionDat
         self.errorImage = errorImage
         imageDownloadData = NSMutableData()
         
-        self.url = url
         var URL = NSURL(string: url)
         
         if URL == nil {
@@ -88,6 +83,7 @@ class DKAsyncImageView: NSImageView, NSURLConnectionDelegate, NSURLConnectionDat
                 spinningWheel = NSProgressIndicator()
                 if let spinningWheel = spinningWheel {
                     addSubview(spinningWheel)
+                    spinningWheel.style = NSProgressIndicatorStyle.SpinningStyle
                     spinningWheel.displayedWhenStopped = false
                     spinningWheel.frame = NSMakeRect(self.frame.size.width * 0.5 - 16, self.frame.size.height * 0.5 - 16, 32, 32)
                     spinningWheel.controlSize = NSControlSize.RegularControlSize
@@ -98,6 +94,7 @@ class DKAsyncImageView: NSImageView, NSURLConnectionDelegate, NSURLConnectionDat
                 spinningWheel = NSProgressIndicator()
                 if let spinningWheel = spinningWheel {
                     addSubview(spinningWheel)
+                    spinningWheel.style = NSProgressIndicatorStyle.SpinningStyle
                     spinningWheel.displayedWhenStopped = false
                     spinningWheel.frame = NSMakeRect(self.frame.size.width * 0.5 - 8, self.frame.size.height * 0.5 - 8, 16, 16)
                     spinningWheel.controlSize = NSControlSize.SmallControlSize
@@ -112,8 +109,6 @@ class DKAsyncImageView: NSImageView, NSURLConnectionDelegate, NSURLConnectionDat
         isLoadingImage = false
         didFailLoadingImage = false
         
-        deleteToolTips()
-        
         spinningWheel?.stopAnimation(self)
         spinningWheel?.removeFromSuperview()
         
@@ -124,7 +119,7 @@ class DKAsyncImageView: NSImageView, NSURLConnectionDelegate, NSURLConnectionDat
         image = nil
     }
     
-    func failureReset() {
+    private func failureReset() {
         isLoadingImage = false
         didFailLoadingImage = true
         userDidCancel = false
@@ -152,7 +147,6 @@ class DKAsyncImageView: NSImageView, NSURLConnectionDelegate, NSURLConnectionDat
     func connectionDidFinishLoading(connection: NSURLConnection) {
         didFailLoadingImage = false
         userDidCancel = false
-        
         if let data = imageDownloadData {
             if let img: NSImage = NSImage(data: data) {
                 image = img
@@ -163,50 +157,55 @@ class DKAsyncImageView: NSImageView, NSURLConnectionDelegate, NSURLConnectionDat
                 imageDownloadData = nil
                 imageURLConnection = nil
                 errorImage = nil
+                
+                
             } else  {
+                println("Error forming image from data.")
                 failureReset()
             }
         } else {
+            println("Image data not downloaded correctly.")
             failureReset()
         }
     }
     
     //MARK: Tooltips
     
-    func setToolTipWhileLoading(ttip1: String, whenFinished ttip2:String, andWhenFinishedWithError ttip3: String) {
+    func setToolTipWhileLoading(ttip1: String?, whenFinished ttip2:String?, andWhenFinishedWithError ttip3: String?) {
         toolTipWhileLoading = ttip1
         toolTipWhenFinished = ttip2
         toolTipWhenFinishedWithError = ttip3
     }
     
     func deleteToolTips() {
-        toolTip = ""
-        toolTipWhileLoading = ""
-        toolTipWhenFinished = ""
-        toolTipWhenFinishedWithError = ""
+        toolTip = nil
+        toolTipWhileLoading = nil
+        toolTipWhenFinished = nil
+        toolTipWhenFinishedWithError = nil
     }
     
     override func mouseEntered(theEvent: NSEvent) {
         if !userDidCancel {  // the user didn't cancel the operation so show the tooltips
             if isLoadingImage {
-                if toolTipWhileLoading != "" {
+                if let toolTipWhileLoading = toolTipWhileLoading {
                     toolTip = toolTipWhileLoading
                 } else {
-                    toolTip = ""
+                    toolTip = nil
                 }
             }
-        } else if didFailLoadingImage {  //connection failed
-            if toolTipWhenFinishedWithError != "" {
-                toolTip = toolTipWhenFinishedWithError
-            } else {
-                toolTip = ""
+            else if didFailLoadingImage {  //connection failed
+                if let toolTipWhenFinishedWithError = toolTipWhenFinishedWithError {
+                    toolTip = toolTipWhenFinishedWithError
+                } else {
+                    toolTip = nil
+                }
             }
-        }
-        else if !self.isLoadingImage { // it's not loading image
-            if toolTipWhenFinished != "" {
-                toolTip = toolTipWhenFinished
-            } else {
-                toolTip = ""
+            else if !isLoadingImage { // it's not loading image
+                if let toolTipWhenFinished = toolTipWhenFinished {
+                    toolTip = toolTipWhenFinished
+                } else {
+                    toolTip = nil
+                }
             }
         }
     }
