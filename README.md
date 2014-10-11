@@ -15,8 +15,29 @@ Features
 
 Documentation
 ----------------
-Include DKAsyncImageView.swift in your project and call one of the following methods to load an image asychronously with various options:
+Include DKAsyncImageView.swift in your project. Set an IB NSImageView's class as DKAsyncImageView or create it programmatically. In the latter case, use the standard NSImageView init methods.
 
+**Download an Image**
+```
+func downloadImageFromURL(url: String)
+func downloadImageFromURL(url: String, placeHolderImage: NSImage?) {
+func downloadImageFromURL(url: String, placeHolderImage: NSImage?, errorImage: NSImage?)
+func downloadImageFromURL(url: String, placeHolderImage:NSImage?, errorImage:NSImage?, usesSpinningWheel: Bool) 
+```
+*usesSpinningWheel* specifies whether a spinning NSProgressIndicator appears over the NSImageView while the image is being downloaded.
 
+**Set Tool Tips**
+```
+func setToolTipWhileLoading(ttip1: String?, whenFinished ttip2:String?, andWhenFinishedWithError ttip3: String?)
+```
+
+**Cancel a Download**
+```
+cancelDownload()
+```
 
 There are no external dependencies other than the Cocoa framework.
+
+Future Direction/Ideas
+----------------
+* Make property based instead of method based
