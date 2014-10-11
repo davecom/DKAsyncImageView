@@ -42,7 +42,9 @@ class DKAsyncImageView: NSImageView, NSURLConnectionDelegate, NSURLConnectionDat
     
     dynamic var url: String = "" {  //settable from KVC
         didSet {
-            self.downloadImageFromURL(url)
+            if (oldValue != url) {
+                self.downloadImageFromURL(url)
+            }
         }
     }
     
