@@ -1,0 +1,412 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		554BA26F19E9475300CAD651 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 554BA26E19E9475300CAD651 /* AppDelegate.swift */; };
+		554BA27119E9475300CAD651 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 554BA27019E9475300CAD651 /* Images.xcassets */; };
+		554BA27419E9475300CAD651 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 554BA27219E9475300CAD651 /* MainMenu.xib */; };
+		554BA28019E9475300CAD651 /* DKAsyncImageViewSampleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 554BA27F19E9475300CAD651 /* DKAsyncImageViewSampleTests.swift */; };
+		554BA28A19E9478E00CAD651 /* DKAsyncImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 554BA28919E9478E00CAD651 /* DKAsyncImageView.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		554BA27A19E9475300CAD651 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 554BA26119E9475300CAD651 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 554BA26819E9475300CAD651;
+			remoteInfo = DKAsyncImageViewSample;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		554BA26919E9475300CAD651 /* DKAsyncImageViewSample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DKAsyncImageViewSample.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		554BA26D19E9475300CAD651 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		554BA26E19E9475300CAD651 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		554BA27019E9475300CAD651 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		554BA27319E9475300CAD651 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MainMenu.xib; sourceTree = "<group>"; };
+		554BA27919E9475300CAD651 /* DKAsyncImageViewSampleTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DKAsyncImageViewSampleTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		554BA27E19E9475300CAD651 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		554BA27F19E9475300CAD651 /* DKAsyncImageViewSampleTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DKAsyncImageViewSampleTests.swift; sourceTree = "<group>"; };
+		554BA28919E9478E00CAD651 /* DKAsyncImageView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DKAsyncImageView.swift; path = ../../DKAsyncImageView.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		554BA26619E9475300CAD651 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		554BA27619E9475300CAD651 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		554BA26019E9475300CAD651 = {
+			isa = PBXGroup;
+			children = (
+				554BA26B19E9475300CAD651 /* DKAsyncImageViewSample */,
+				554BA27C19E9475300CAD651 /* DKAsyncImageViewSampleTests */,
+				554BA26A19E9475300CAD651 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		554BA26A19E9475300CAD651 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				554BA26919E9475300CAD651 /* DKAsyncImageViewSample.app */,
+				554BA27919E9475300CAD651 /* DKAsyncImageViewSampleTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		554BA26B19E9475300CAD651 /* DKAsyncImageViewSample */ = {
+			isa = PBXGroup;
+			children = (
+				554BA26E19E9475300CAD651 /* AppDelegate.swift */,
+				554BA27019E9475300CAD651 /* Images.xcassets */,
+				554BA27219E9475300CAD651 /* MainMenu.xib */,
+				554BA28919E9478E00CAD651 /* DKAsyncImageView.swift */,
+				554BA26C19E9475300CAD651 /* Supporting Files */,
+			);
+			path = DKAsyncImageViewSample;
+			sourceTree = "<group>";
+		};
+		554BA26C19E9475300CAD651 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				554BA26D19E9475300CAD651 /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		554BA27C19E9475300CAD651 /* DKAsyncImageViewSampleTests */ = {
+			isa = PBXGroup;
+			children = (
+				554BA27F19E9475300CAD651 /* DKAsyncImageViewSampleTests.swift */,
+				554BA27D19E9475300CAD651 /* Supporting Files */,
+			);
+			path = DKAsyncImageViewSampleTests;
+			sourceTree = "<group>";
+		};
+		554BA27D19E9475300CAD651 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				554BA27E19E9475300CAD651 /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		554BA26819E9475300CAD651 /* DKAsyncImageViewSample */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 554BA28319E9475300CAD651 /* Build configuration list for PBXNativeTarget "DKAsyncImageViewSample" */;
+			buildPhases = (
+				554BA26519E9475300CAD651 /* Sources */,
+				554BA26619E9475300CAD651 /* Frameworks */,
+				554BA26719E9475300CAD651 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = DKAsyncImageViewSample;
+			productName = DKAsyncImageViewSample;
+			productReference = 554BA26919E9475300CAD651 /* DKAsyncImageViewSample.app */;
+			productType = "com.apple.product-type.application";
+		};
+		554BA27819E9475300CAD651 /* DKAsyncImageViewSampleTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 554BA28619E9475300CAD651 /* Build configuration list for PBXNativeTarget "DKAsyncImageViewSampleTests" */;
+			buildPhases = (
+				554BA27519E9475300CAD651 /* Sources */,
+				554BA27619E9475300CAD651 /* Frameworks */,
+				554BA27719E9475300CAD651 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				554BA27B19E9475300CAD651 /* PBXTargetDependency */,
+			);
+			name = DKAsyncImageViewSampleTests;
+			productName = DKAsyncImageViewSampleTests;
+			productReference = 554BA27919E9475300CAD651 /* DKAsyncImageViewSampleTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		554BA26119E9475300CAD651 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0610;
+				ORGANIZATIONNAME = "Oak Snow Consulting";
+				TargetAttributes = {
+					554BA26819E9475300CAD651 = {
+						CreatedOnToolsVersion = 6.1;
+					};
+					554BA27819E9475300CAD651 = {
+						CreatedOnToolsVersion = 6.1;
+						TestTargetID = 554BA26819E9475300CAD651;
+					};
+				};
+			};
+			buildConfigurationList = 554BA26419E9475300CAD651 /* Build configuration list for PBXProject "DKAsyncImageViewSample" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 554BA26019E9475300CAD651;
+			productRefGroup = 554BA26A19E9475300CAD651 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				554BA26819E9475300CAD651 /* DKAsyncImageViewSample */,
+				554BA27819E9475300CAD651 /* DKAsyncImageViewSampleTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		554BA26719E9475300CAD651 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				554BA27119E9475300CAD651 /* Images.xcassets in Resources */,
+				554BA27419E9475300CAD651 /* MainMenu.xib in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		554BA27719E9475300CAD651 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		554BA26519E9475300CAD651 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				554BA28A19E9478E00CAD651 /* DKAsyncImageView.swift in Sources */,
+				554BA26F19E9475300CAD651 /* AppDelegate.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		554BA27519E9475300CAD651 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				554BA28019E9475300CAD651 /* DKAsyncImageViewSampleTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		554BA27B19E9475300CAD651 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 554BA26819E9475300CAD651 /* DKAsyncImageViewSample */;
+			targetProxy = 554BA27A19E9475300CAD651 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		554BA27219E9475300CAD651 /* MainMenu.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				554BA27319E9475300CAD651 /* Base */,
+			);
+			name = MainMenu.xib;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		554BA28119E9475300CAD651 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COPY_PHASE_STRIP = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		554BA28219E9475300CAD651 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		554BA28419E9475300CAD651 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = DKAsyncImageViewSample/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		554BA28519E9475300CAD651 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = DKAsyncImageViewSample/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+		554BA28719E9475300CAD651 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				COMBINE_HIDPI_IMAGES = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(DEVELOPER_FRAMEWORKS_DIR)",
+					"$(inherited)",
+				);
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = DKAsyncImageViewSampleTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/DKAsyncImageViewSample.app/Contents/MacOS/DKAsyncImageViewSample";
+			};
+			name = Debug;
+		};
+		554BA28819E9475300CAD651 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				COMBINE_HIDPI_IMAGES = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(DEVELOPER_FRAMEWORKS_DIR)",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = DKAsyncImageViewSampleTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/DKAsyncImageViewSample.app/Contents/MacOS/DKAsyncImageViewSample";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		554BA26419E9475300CAD651 /* Build configuration list for PBXProject "DKAsyncImageViewSample" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				554BA28119E9475300CAD651 /* Debug */,
+				554BA28219E9475300CAD651 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		554BA28319E9475300CAD651 /* Build configuration list for PBXNativeTarget "DKAsyncImageViewSample" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				554BA28419E9475300CAD651 /* Debug */,
+				554BA28519E9475300CAD651 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		554BA28619E9475300CAD651 /* Build configuration list for PBXNativeTarget "DKAsyncImageViewSampleTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				554BA28719E9475300CAD651 /* Debug */,
+				554BA28819E9475300CAD651 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 554BA26119E9475300CAD651 /* Project object */;
+}
