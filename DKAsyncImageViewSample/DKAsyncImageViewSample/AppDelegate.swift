@@ -19,9 +19,5 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         imageView.downloadImageFromURL("http://www.google.com/images/logo.gif")
     }
 
-    func applicationWillTerminate(aNotification: NSNotification) {
-    }
-
-
 }
 

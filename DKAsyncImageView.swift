@@ -44,19 +44,7 @@ class DKAsyncImageView: NSImageView, NSURLConnectionDelegate, NSURLConnectionDat
         cancelDownload()
     }
     
-    func downloadImageFromURL(url: String) {
-        downloadImageFromURL(url, placeHolderImage: nil, errorImage: nil, usesSpinningWheel: false)
-    }
-    
-    func downloadImageFromURL(url: String, placeHolderImage: NSImage?) {
-        downloadImageFromURL(url, placeHolderImage: placeHolderImage, errorImage: nil, usesSpinningWheel: false)
-    }
-    
-    func downloadImageFromURL(url: String, placeHolderImage: NSImage?, errorImage: NSImage?) {
-        downloadImageFromURL(url, placeHolderImage: placeHolderImage, errorImage: errorImage, usesSpinningWheel: false)
-    }
-    
-    func downloadImageFromURL(url: String, placeHolderImage:NSImage?, errorImage:NSImage?, usesSpinningWheel: Bool) {
+    func downloadImageFromURL(url: String, placeHolderImage:NSImage? = nil, errorImage:NSImage? = nil, usesSpinningWheel: Bool = false) {
         cancelDownload()
         
         isLoadingImage = true
