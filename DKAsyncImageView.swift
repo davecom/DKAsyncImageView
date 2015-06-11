@@ -24,7 +24,8 @@
 
 import Cocoa
 
-class DKAsyncImageView: NSImageView, NSURLConnectionDelegate, NSURLConnectionDataDelegate {
+/// A Swift subclass of NSImageView for loading remote images asynchronously.
+public class DKAsyncImageView: NSImageView, NSURLConnectionDelegate, NSURLConnectionDataDelegate {
     private var imageURLConnection: NSURLConnection?
     private var imageDownloadData: NSMutableData?
     private var errorImage: NSImage?
@@ -44,7 +45,13 @@ class DKAsyncImageView: NSImageView, NSURLConnectionDelegate, NSURLConnectionDat
         cancelDownload()
     }
     
-    func downloadImageFromURL(url: String, placeHolderImage:NSImage? = nil, errorImage:NSImage? = nil, usesSpinningWheel: Bool = false) {
+    /// Grab an image form a URL and asynchronously load it into the image view
+    ///
+    /// :param: url A String representing the URL of the image.
+    /// :param: placeHolderImage an optional NSImage to temporarily display while the image is downloading
+    /// :param: errorImage an optional NSImage that displays if the download fails.
+    /// :param: usesSpinningWheel A Bool that determines whether or not a spinning wheel indicator displays during download
+    public func downloadImageFromURL(url: String, placeHolderImage:NSImage? = nil, errorImage:NSImage? = nil, usesSpinningWheel: Bool = false) {
         cancelDownload()
         
         isLoadingImage = true
@@ -92,7 +99,8 @@ class DKAsyncImageView: NSImageView, NSURLConnectionDelegate, NSURLConnectionDat
         }
     }
     
-    func cancelDownload() {
+    /// Cancel the download
+    public func cancelDownload() {
         userDidCancel = true
         isLoadingImage = false
         didFailLoadingImage = false
@@ -106,6 +114,7 @@ class DKAsyncImageView: NSImageView, NSURLConnectionDelegate, NSURLConnectionDat
         errorImage = nil
         image = nil
     }
+    
     
     private func failureReset() {
         isLoadingImage = false
@@ -124,15 +133,15 @@ class DKAsyncImageView: NSImageView, NSURLConnectionDelegate, NSURLConnectionDat
     
     //MARK: NSURLConnectionDelegate Methods
     
-    func connection(connection: NSURLConnection, didReceiveData data: NSData) {
+    public func connection(connection: NSURLConnection, didReceiveData data: NSData) {
         imageDownloadData?.appendData(data)
     }
     
-    func connection(connection: NSURLConnection, didFailWithError error: NSError) {
+    public func connection(connection: NSURLConnection, didFailWithError error: NSError) {
         failureReset()
     }
     
-    func connectionDidFinishLoading(connection: NSURLConnection) {
+    public func connectionDidFinishLoading(connection: NSURLConnection) {
         didFailLoadingImage = false
         userDidCancel = false
         if let data = imageDownloadData {
@@ -159,20 +168,26 @@ class DKAsyncImageView: NSImageView, NSURLConnectionDelegate, NSURLConnectionDat
     
     //MARK: Tooltips
     
-    func setToolTipWhileLoading(ttip1: String?, whenFinished ttip2:String?, andWhenFinishedWithError ttip3: String?) {
+    /// Set tooltips for loading, finished, and error states
+    ///
+    /// :param: ttip1 The tool tip to show while loading
+    /// :param: whenFinished The tool tip that shows after the image downloaded.
+    /// :param: andWhenFinishedwithError The tool tip that shows when an error occurs.
+    public func setToolTipWhileLoading(ttip1: String?, whenFinished ttip2:String?, andWhenFinishedWithError ttip3: String?) {
         toolTipWhileLoading = ttip1
         toolTipWhenFinished = ttip2
         toolTipWhenFinishedWithError = ttip3
     }
-    
-    func deleteToolTips() {
+
+    /// Remove all tooltips
+    public func deleteToolTips() {
         toolTip = nil
         toolTipWhileLoading = nil
         toolTipWhenFinished = nil
         toolTipWhenFinishedWithError = nil
     }
     
-    override func mouseEntered(theEvent: NSEvent) {
+    override public func mouseEntered(theEvent: NSEvent) {
         if !userDidCancel {  // the user didn't cancel the operation so show the tooltips
             if isLoadingImage {
                 if let toolTipWhileLoading = toolTipWhileLoading {
@@ -198,7 +213,7 @@ class DKAsyncImageView: NSImageView, NSURLConnectionDelegate, NSURLConnectionDat
         }
     }
     
-    override func updateTrackingAreas() {
+    override public func updateTrackingAreas() {
         if let trackingArea = trackingArea {
             removeTrackingArea(trackingArea)
         }

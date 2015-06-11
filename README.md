@@ -12,10 +12,11 @@ Features
 * Set an 'Error Image' to be displayed when an error occurs while downloading the image
 * Set ToolTips for each state -> Loading Image / Image Loaded / Error Loading Image
 * Display a Spinning Wheel on top of DKAsyncImageView while it's downloading the image
+* No external dependencies beyond the Cocoa frameworks
 
 Documentation
 ----------------
-Include DKAsyncImageView.swift in your project. Set an IB NSImageView's class as DKAsyncImageView or create it programmatically. In the latter case, use the standard NSImageView init methods.
+Include `DKAsyncImageView.swift` in your project or use the CocoaPod `DKAsyncImageView`. Set an IB NSImageView's class as DKAsyncImageView or create it programmatically. In the latter case, use the standard NSImageView init methods.
 
 **Download an Image**
 ```
