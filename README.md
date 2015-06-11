@@ -20,12 +20,11 @@ Include `DKAsyncImageView.swift` in your project or use the CocoaPod `DKAsyncIma
 
 **Download an Image**
 ```
-func downloadImageFromURL(url: String)
-func downloadImageFromURL(url: String, placeHolderImage: NSImage?) {
-func downloadImageFromURL(url: String, placeHolderImage: NSImage?, errorImage: NSImage?)
-func downloadImageFromURL(url: String, placeHolderImage:NSImage?, errorImage:NSImage?, usesSpinningWheel: Bool) 
+func downloadImageFromURL(url: String, placeHolderImage: NSImage? = nil, errorImage: NSImage? = nil, usesSpinningWheel: Bool = false) 
 ```
-*usesSpinningWheel* specifies whether a spinning NSProgressIndicator appears over the NSImageView while the image is being downloaded.
+At minimum, you simply must provide the URL of the image you want to asynchronously download. However, you also have the option of providing a `placeHolderImage` that displays while the download is taking place, and an `errorImage` that displays if the download is unsuccessful.
+
+`usesSpinningWheel` specifies whether a spinning NSProgressIndicator appears over the NSImageView while the image is being downloaded.
 
 **Set Tool Tips**
 ```
