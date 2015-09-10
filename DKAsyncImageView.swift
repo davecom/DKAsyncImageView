@@ -47,10 +47,10 @@ public class DKAsyncImageView: NSImageView, NSURLConnectionDelegate, NSURLConnec
     
     /// Grab an image form a URL and asynchronously load it into the image view
     ///
-    /// :param: url A String representing the URL of the image.
-    /// :param: placeHolderImage an optional NSImage to temporarily display while the image is downloading
-    /// :param: errorImage an optional NSImage that displays if the download fails.
-    /// :param: usesSpinningWheel A Bool that determines whether or not a spinning wheel indicator displays during download
+    /// - parameter url: A String representing the URL of the image.
+    /// - parameter placeHolderImage: an optional NSImage to temporarily display while the image is downloading
+    /// - parameter errorImage: an optional NSImage that displays if the download fails.
+    /// - parameter usesSpinningWheel: A Bool that determines whether or not a spinning wheel indicator displays during download
     public func downloadImageFromURL(url: String, placeHolderImage:NSImage? = nil, errorImage:NSImage? = nil, usesSpinningWheel: Bool = false) {
         cancelDownload()
         
@@ -62,7 +62,7 @@ public class DKAsyncImageView: NSImageView, NSURLConnectionDelegate, NSURLConnec
         self.errorImage = errorImage
         imageDownloadData = NSMutableData()
         
-        var URL = NSURL(string: url)
+        let URL = NSURL(string: url)
         
         if URL == nil {
             isLoadingImage = false
@@ -70,7 +70,7 @@ public class DKAsyncImageView: NSImageView, NSURLConnectionDelegate, NSURLConnec
             return
         }
             
-        var conn: NSURLConnection? = NSURLConnection(request: NSURLRequest(URL: URL!), delegate: self)
+        let conn: NSURLConnection? = NSURLConnection(request: NSURLRequest(URL: URL!), delegate: self)
         imageURLConnection = conn
         
         if usesSpinningWheel {
@@ -157,11 +157,11 @@ public class DKAsyncImageView: NSImageView, NSURLConnectionDelegate, NSURLConnec
                 
                 
             } else  {
-                println("Error forming image from data.")
+                Swift.print("Error forming image from data.")
                 failureReset()
             }
         } else {
-            println("Image data not downloaded correctly.")
+            Swift.print("Image data not downloaded correctly.")
             failureReset()
         }
     }
@@ -170,9 +170,9 @@ public class DKAsyncImageView: NSImageView, NSURLConnectionDelegate, NSURLConnec
     
     /// Set tooltips for loading, finished, and error states
     ///
-    /// :param: ttip1 The tool tip to show while loading
-    /// :param: whenFinished The tool tip that shows after the image downloaded.
-    /// :param: andWhenFinishedwithError The tool tip that shows when an error occurs.
+    /// - parameter ttip1: The tool tip to show while loading
+    /// - parameter whenFinished: The tool tip that shows after the image downloaded.
+    /// - parameter andWhenFinishedwithError: The tool tip that shows when an error occurs.
     public func setToolTipWhileLoading(ttip1: String?, whenFinished ttip2:String?, andWhenFinishedWithError ttip3: String?) {
         toolTipWhileLoading = ttip1
         toolTipWhenFinished = ttip2
@@ -218,7 +218,7 @@ public class DKAsyncImageView: NSImageView, NSURLConnectionDelegate, NSURLConnec
             removeTrackingArea(trackingArea)
         }
         
-        let opts: NSTrackingAreaOptions = NSTrackingAreaOptions(NSTrackingAreaOptions.MouseEnteredAndExited.rawValue | NSTrackingAreaOptions.ActiveAlways.rawValue)
+        let opts: NSTrackingAreaOptions = NSTrackingAreaOptions(rawValue: NSTrackingAreaOptions.MouseEnteredAndExited.rawValue | NSTrackingAreaOptions.ActiveAlways.rawValue)
         trackingArea = NSTrackingArea(rect: self.bounds, options: opts, owner: self, userInfo: nil)
         if let trackingArea = trackingArea {
             self.addTrackingArea(trackingArea)

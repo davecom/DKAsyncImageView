@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = 'DKAsyncImageView'
-  s.version          = '1.0'
+  s.version          = '1.0.1'
   s.license          = 'MIT'
   s.summary          = 'A Swift subclass of NSImageView for loading remote images asynchronously.'
   s.homepage         = 'https://github.com/davecom/DKAsyncImageView'
