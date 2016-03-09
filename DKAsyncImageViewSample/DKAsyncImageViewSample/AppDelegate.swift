@@ -16,7 +16,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     @IBOutlet weak var imageView: DKAsyncImageView!
 
     func applicationDidFinishLaunching(aNotification: NSNotification) {
-        imageView.downloadImageFromURL("http://www.google.com/images/logo.gif")
+        imageView.downloadImageFromURL("https://www.google.com/images/logo.gif")
     }
 
 }
