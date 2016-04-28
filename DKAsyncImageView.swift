@@ -27,6 +27,7 @@ import Cocoa
 /// A Swift subclass of NSImageView for loading remote images asynchronously.
 public class DKAsyncImageView: NSImageView, NSURLSessionDelegate, NSURLSessionDownloadDelegate {
     private var imageURLDownloadTask: NSURLSessionDownloadTask?
+    private var networkSession: NSURLSession?
     private var imageDownloadData: NSData?
     private var errorImage: NSImage?
     
@@ -42,6 +43,7 @@ public class DKAsyncImageView: NSImageView, NSURLSessionDelegate, NSURLSessionDo
     private var toolTipWhenFinishedWithError: String?
     
     deinit {
+        
         cancelDownload()
     }
     
@@ -53,7 +55,7 @@ public class DKAsyncImageView: NSImageView, NSURLSessionDelegate, NSURLSessionDo
     /// - parameter usesSpinningWheel: A Bool that determines whether or not a spinning wheel indicator displays during download
     public func downloadImageFromURL(url: String, placeHolderImage:NSImage? = nil, errorImage:NSImage? = nil, usesSpinningWheel: Bool = false) {
         cancelDownload()
-        
+    
         isLoadingImage = true
         didFailLoadingImage = false
         userDidCancel = false
@@ -70,8 +72,8 @@ public class DKAsyncImageView: NSImageView, NSURLSessionDelegate, NSURLSessionDo
             return
         }
         
-        let session = NSURLSession.init(configuration:NSURLSessionConfiguration.defaultSessionConfiguration(), delegate: self, delegateQueue: NSOperationQueue.mainQueue())
-        imageURLDownloadTask = session.downloadTaskWithURL(URL!)
+        networkSession = NSURLSession.init(configuration:NSURLSessionConfiguration.defaultSessionConfiguration(), delegate: self, delegateQueue: NSOperationQueue.mainQueue())
+        imageURLDownloadTask = networkSession!.downloadTaskWithURL(URL!)
         
         imageURLDownloadTask?.resume()
         if usesSpinningWheel {
@@ -108,8 +110,7 @@ public class DKAsyncImageView: NSImageView, NSURLSessionDelegate, NSURLSessionDo
         
         spinningWheel?.stopAnimation(self)
         spinningWheel?.removeFromSuperview()
-        
-        imageURLDownloadTask?.cancel()
+        networkSession?.invalidateAndCancel()
         imageURLDownloadTask = nil
         imageDownloadData = nil
         errorImage = nil
