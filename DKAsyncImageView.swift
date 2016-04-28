@@ -2,7 +2,7 @@
 //  DKAsyncImageView.swift
 //  The MIT License (MIT)
 //
-//  Copyright (c) 2014 David Kopec
+//  Copyright (c) 2014-2016 David Kopec
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -43,7 +43,6 @@ public class DKAsyncImageView: NSImageView, NSURLSessionDelegate, NSURLSessionDo
     private var toolTipWhenFinishedWithError: String?
     
     deinit {
-        
         cancelDownload()
     }
     
@@ -55,7 +54,7 @@ public class DKAsyncImageView: NSImageView, NSURLSessionDelegate, NSURLSessionDo
     /// - parameter usesSpinningWheel: A Bool that determines whether or not a spinning wheel indicator displays during download
     public func downloadImageFromURL(url: String, placeHolderImage:NSImage? = nil, errorImage:NSImage? = nil, usesSpinningWheel: Bool = false) {
         cancelDownload()
-    
+        
         isLoadingImage = true
         didFailLoadingImage = false
         userDidCancel = false
@@ -64,16 +63,14 @@ public class DKAsyncImageView: NSImageView, NSURLSessionDelegate, NSURLSessionDo
         self.errorImage = errorImage
         imageDownloadData = NSMutableData()
         
-        let URL = NSURL(string: url)
-        
-        if URL == nil {
+        guard let URL = NSURL(string: url) else {
             isLoadingImage = false
             NSLog("Error: malformed URL passed to downloadImageFromURL")
             return
         }
         
         networkSession = NSURLSession.init(configuration:NSURLSessionConfiguration.defaultSessionConfiguration(), delegate: self, delegateQueue: NSOperationQueue.mainQueue())
-        imageURLDownloadTask = networkSession!.downloadTaskWithURL(URL!)
+        imageURLDownloadTask = networkSession!.downloadTaskWithURL(URL)
         
         imageURLDownloadTask?.resume()
         if usesSpinningWheel {
@@ -137,7 +134,7 @@ public class DKAsyncImageView: NSImageView, NSURLSessionDelegate, NSURLSessionDo
     
     public func URLSession(session: NSURLSession, downloadTask: NSURLSessionDownloadTask, didFinishDownloadingToURL location: NSURL) {
         
-    
+        
         imageDownloadData = NSData.init(contentsOfURL: location)
     }
     
@@ -145,36 +142,34 @@ public class DKAsyncImageView: NSImageView, NSURLSessionDelegate, NSURLSessionDo
     
     public func URLSession(session: NSURLSession, task: NSURLSessionTask, didCompleteWithError error: NSError?) {
         
-        if (error != nil) {
-           
+        guard error == nil else {
+            Swift.print(error?.localizedDescription)
             failureReset()
-        
-        }else{
+            return;
+        }
             
-        
+            
         didFailLoadingImage = false
         userDidCancel = false
-        if let data = imageDownloadData {
-            if let img: NSImage = NSImage(data: data) {
-                image = img
-                isLoadingImage = false
-                
-                spinningWheel?.stopAnimation(self)
-                spinningWheel?.removeFromSuperview()
-                imageDownloadData = nil
-                imageURLDownloadTask = nil
-                errorImage = nil
-                
-                
-            } else  {
-                Swift.print("Error forming image from data.")
-                failureReset()
-            }
-        } else {
+        guard let data = imageDownloadData else {
             Swift.print("Image data not downloaded correctly.")
             failureReset()
+            return;
         }
-      }
+        guard let img: NSImage = NSImage(data: data) else {
+            Swift.print("Error forming image from data.")
+            failureReset()
+            return;
+        }
+        image = img
+        isLoadingImage = false
+        
+        spinningWheel?.stopAnimation(self)
+        spinningWheel?.removeFromSuperview()
+        imageDownloadData = nil
+        imageURLDownloadTask = nil
+        errorImage = nil
+
     }
     
     //MARK: Tooltips
@@ -189,7 +184,7 @@ public class DKAsyncImageView: NSImageView, NSURLSessionDelegate, NSURLSessionDo
         toolTipWhenFinished = ttip2
         toolTipWhenFinishedWithError = ttip3
     }
-
+    
     /// Remove all tooltips
     public func deleteToolTips() {
         toolTip = nil
