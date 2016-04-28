@@ -25,9 +25,9 @@
 import Cocoa
 
 /// A Swift subclass of NSImageView for loading remote images asynchronously.
-public class DKAsyncImageView: NSImageView, NSURLConnectionDelegate, NSURLConnectionDataDelegate {
-    private var imageURLConnection: NSURLConnection?
-    private var imageDownloadData: NSMutableData?
+public class DKAsyncImageView: NSImageView, NSURLSessionDelegate, NSURLSessionDownloadDelegate {
+    private var imageURLDownloadTask: NSURLSessionDownloadTask?
+    private var imageDownloadData: NSData?
     private var errorImage: NSImage?
     
     private var spinningWheel: NSProgressIndicator?
@@ -69,10 +69,11 @@ public class DKAsyncImageView: NSImageView, NSURLConnectionDelegate, NSURLConnec
             NSLog("Error: malformed URL passed to downloadImageFromURL")
             return
         }
-            
-        let conn: NSURLConnection? = NSURLConnection(request: NSURLRequest(URL: URL!), delegate: self)
-        imageURLConnection = conn
         
+        let session = NSURLSession.init(configuration:NSURLSessionConfiguration.defaultSessionConfiguration(), delegate: self, delegateQueue: NSOperationQueue.mainQueue())
+        imageURLDownloadTask = session.downloadTaskWithURL(URL!)
+        
+        imageURLDownloadTask?.resume()
         if usesSpinningWheel {
             if self.frame.size.height >= 64 && self.frame.size.width >= 64 {
                 spinningWheel = NSProgressIndicator()
@@ -108,8 +109,8 @@ public class DKAsyncImageView: NSImageView, NSURLConnectionDelegate, NSURLConnec
         spinningWheel?.stopAnimation(self)
         spinningWheel?.removeFromSuperview()
         
-        imageURLConnection?.cancel()
-        imageURLConnection = nil
+        imageURLDownloadTask?.cancel()
+        imageURLDownloadTask = nil
         imageDownloadData = nil
         errorImage = nil
         image = nil
@@ -125,23 +126,31 @@ public class DKAsyncImageView: NSImageView, NSURLConnectionDelegate, NSURLConnec
         spinningWheel?.removeFromSuperview()
         
         imageDownloadData = nil
-        imageURLConnection = nil
+        imageURLDownloadTask = nil
         
         image = errorImage
         errorImage = nil
     }
     
-    //MARK: NSURLConnectionDelegate Methods
+    //MARK: NSURLSessionDownloadTask Delegate
     
-    public func connection(connection: NSURLConnection, didReceiveData data: NSData) {
-        imageDownloadData?.appendData(data)
+    public func URLSession(session: NSURLSession, downloadTask: NSURLSessionDownloadTask, didFinishDownloadingToURL location: NSURL) {
+        
+    
+        imageDownloadData = NSData.init(contentsOfURL: location)
     }
     
-    public func connection(connection: NSURLConnection, didFailWithError error: NSError) {
-        failureReset()
-    }
+    //MARK: NSURLSessionTask Delegate
     
-    public func connectionDidFinishLoading(connection: NSURLConnection) {
+    public func URLSession(session: NSURLSession, task: NSURLSessionTask, didCompleteWithError error: NSError?) {
+        
+        if (error != nil) {
+           
+            failureReset()
+        
+        }else{
+            
+        
         didFailLoadingImage = false
         userDidCancel = false
         if let data = imageDownloadData {
@@ -152,7 +161,7 @@ public class DKAsyncImageView: NSImageView, NSURLConnectionDelegate, NSURLConnec
                 spinningWheel?.stopAnimation(self)
                 spinningWheel?.removeFromSuperview()
                 imageDownloadData = nil
-                imageURLConnection = nil
+                imageURLDownloadTask = nil
                 errorImage = nil
                 
                 
@@ -164,6 +173,7 @@ public class DKAsyncImageView: NSImageView, NSURLConnectionDelegate, NSURLConnec
             Swift.print("Image data not downloaded correctly.")
             failureReset()
         }
+      }
     }
     
     //MARK: Tooltips
