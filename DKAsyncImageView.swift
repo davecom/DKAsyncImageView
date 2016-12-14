@@ -25,22 +25,22 @@
 import Cocoa
 
 /// A Swift subclass of NSImageView for loading remote images asynchronously.
-public class DKAsyncImageView: NSImageView, NSURLSessionDelegate, NSURLSessionDownloadDelegate {
-    private var imageURLDownloadTask: NSURLSessionDownloadTask?
-    private var networkSession: NSURLSession?
-    private var imageDownloadData: NSData?
-    private var errorImage: NSImage?
+open class DKAsyncImageView: NSImageView, URLSessionDelegate, URLSessionDownloadDelegate {
+    fileprivate var imageURLDownloadTask: URLSessionDownloadTask?
+    fileprivate var networkSession: Foundation.URLSession?
+    fileprivate var imageDownloadData: Data?
+    fileprivate var errorImage: NSImage?
     
-    private var spinningWheel: NSProgressIndicator?
-    private var trackingArea: NSTrackingArea?
+    fileprivate var spinningWheel: NSProgressIndicator?
+    fileprivate var trackingArea: NSTrackingArea?
     
     var isLoadingImage: Bool = false
     var userDidCancel: Bool = false
     var didFailLoadingImage: Bool = false
     
-    private var toolTipWhileLoading: String?
-    private var toolTipWhenFinished: String?
-    private var toolTipWhenFinishedWithError: String?
+    fileprivate var toolTipWhileLoading: String?
+    fileprivate var toolTipWhenFinished: String?
+    fileprivate var toolTipWhenFinishedWithError: String?
     
     deinit {
         cancelDownload()
@@ -52,7 +52,7 @@ public class DKAsyncImageView: NSImageView, NSURLSessionDelegate, NSURLSessionDo
     /// - parameter placeHolderImage: an optional NSImage to temporarily display while the image is downloading
     /// - parameter errorImage: an optional NSImage that displays if the download fails.
     /// - parameter usesSpinningWheel: A Bool that determines whether or not a spinning wheel indicator displays during download
-    public func downloadImageFromURL(url: String, placeHolderImage:NSImage? = nil, errorImage:NSImage? = nil, usesSpinningWheel: Bool = false) {
+    open func downloadImageFromURL(_ url: String, placeHolderImage:NSImage? = nil, errorImage:NSImage? = nil, usesSpinningWheel: Bool = false) {
         cancelDownload()
         
         isLoadingImage = true
@@ -61,16 +61,16 @@ public class DKAsyncImageView: NSImageView, NSURLSessionDelegate, NSURLSessionDo
         
         image = placeHolderImage
         self.errorImage = errorImage
-        imageDownloadData = NSMutableData()
+        imageDownloadData = NSMutableData() as Data
         
-        guard let URL = NSURL(string: url) else {
+        guard let URL = URL(string: url) else {
             isLoadingImage = false
             NSLog("Error: malformed URL passed to downloadImageFromURL")
             return
         }
         
-        networkSession = NSURLSession.init(configuration:NSURLSessionConfiguration.defaultSessionConfiguration(), delegate: self, delegateQueue: NSOperationQueue.mainQueue())
-        imageURLDownloadTask = networkSession!.downloadTaskWithURL(URL)
+        networkSession = Foundation.URLSession.init(configuration:URLSessionConfiguration.default, delegate: self, delegateQueue: OperationQueue.main)
+        imageURLDownloadTask = networkSession!.downloadTask(with: URL)
         
         imageURLDownloadTask?.resume()
         if usesSpinningWheel {
@@ -78,10 +78,10 @@ public class DKAsyncImageView: NSImageView, NSURLSessionDelegate, NSURLSessionDo
                 spinningWheel = NSProgressIndicator()
                 if let spinningWheel = spinningWheel {
                     addSubview(spinningWheel)
-                    spinningWheel.style = NSProgressIndicatorStyle.SpinningStyle
-                    spinningWheel.displayedWhenStopped = false
+                    spinningWheel.style = NSProgressIndicatorStyle.spinningStyle
+                    spinningWheel.isDisplayedWhenStopped = false
                     spinningWheel.frame = NSMakeRect(self.frame.size.width * 0.5 - 16, self.frame.size.height * 0.5 - 16, 32, 32)
-                    spinningWheel.controlSize = NSControlSize.RegularControlSize
+                    spinningWheel.controlSize = NSControlSize.regular
                     spinningWheel.startAnimation(self)
                 }
                 
@@ -89,10 +89,10 @@ public class DKAsyncImageView: NSImageView, NSURLSessionDelegate, NSURLSessionDo
                 spinningWheel = NSProgressIndicator()
                 if let spinningWheel = spinningWheel {
                     addSubview(spinningWheel)
-                    spinningWheel.style = NSProgressIndicatorStyle.SpinningStyle
-                    spinningWheel.displayedWhenStopped = false
+                    spinningWheel.style = NSProgressIndicatorStyle.spinningStyle
+                    spinningWheel.isDisplayedWhenStopped = false
                     spinningWheel.frame = NSMakeRect(self.frame.size.width * 0.5 - 8, self.frame.size.height * 0.5 - 8, 16, 16)
-                    spinningWheel.controlSize = NSControlSize.SmallControlSize
+                    spinningWheel.controlSize = NSControlSize.small
                     spinningWheel.startAnimation(self)
                 }
             }
@@ -100,7 +100,7 @@ public class DKAsyncImageView: NSImageView, NSURLSessionDelegate, NSURLSessionDo
     }
     
     /// Cancel the download
-    public func cancelDownload() {
+    open func cancelDownload() {
         userDidCancel = true
         isLoadingImage = false
         didFailLoadingImage = false
@@ -115,7 +115,7 @@ public class DKAsyncImageView: NSImageView, NSURLSessionDelegate, NSURLSessionDo
     }
     
     
-    private func failureReset() {
+    fileprivate func failureReset() {
         isLoadingImage = false
         didFailLoadingImage = true
         userDidCancel = false
@@ -132,18 +132,18 @@ public class DKAsyncImageView: NSImageView, NSURLSessionDelegate, NSURLSessionDo
     
     //MARK: NSURLSessionDownloadTask Delegate
     
-    public func URLSession(session: NSURLSession, downloadTask: NSURLSessionDownloadTask, didFinishDownloadingToURL location: NSURL) {
+    open func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didFinishDownloadingTo location: URL) {
         
         
-        imageDownloadData = NSData.init(contentsOfURL: location)
+        imageDownloadData = try? Data.init(contentsOf: location)
     }
     
     //MARK: NSURLSessionTask Delegate
     
-    public func URLSession(session: NSURLSession, task: NSURLSessionTask, didCompleteWithError error: NSError?) {
+    open func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError error: Error?) {
         
         guard error == nil else {
-            Swift.print(error?.localizedDescription)
+            Swift.print(error!.localizedDescription)
             failureReset()
             return;
         }
@@ -179,21 +179,21 @@ public class DKAsyncImageView: NSImageView, NSURLSessionDelegate, NSURLSessionDo
     /// - parameter ttip1: The tool tip to show while loading
     /// - parameter whenFinished: The tool tip that shows after the image downloaded.
     /// - parameter andWhenFinishedwithError: The tool tip that shows when an error occurs.
-    public func setToolTipWhileLoading(ttip1: String?, whenFinished ttip2:String?, andWhenFinishedWithError ttip3: String?) {
+    open func setToolTipWhileLoading(_ ttip1: String?, whenFinished ttip2:String?, andWhenFinishedWithError ttip3: String?) {
         toolTipWhileLoading = ttip1
         toolTipWhenFinished = ttip2
         toolTipWhenFinishedWithError = ttip3
     }
     
     /// Remove all tooltips
-    public func deleteToolTips() {
+    open func deleteToolTips() {
         toolTip = nil
         toolTipWhileLoading = nil
         toolTipWhenFinished = nil
         toolTipWhenFinishedWithError = nil
     }
     
-    override public func mouseEntered(theEvent: NSEvent) {
+    override open func mouseEntered(with theEvent: NSEvent) {
         if !userDidCancel {  // the user didn't cancel the operation so show the tooltips
             if isLoadingImage {
                 if let toolTipWhileLoading = toolTipWhileLoading {
@@ -219,12 +219,12 @@ public class DKAsyncImageView: NSImageView, NSURLSessionDelegate, NSURLSessionDo
         }
     }
     
-    override public func updateTrackingAreas() {
+    override open func updateTrackingAreas() {
         if let trackingArea = trackingArea {
             removeTrackingArea(trackingArea)
         }
         
-        let opts: NSTrackingAreaOptions = NSTrackingAreaOptions(rawValue: NSTrackingAreaOptions.MouseEnteredAndExited.rawValue | NSTrackingAreaOptions.ActiveAlways.rawValue)
+        let opts: NSTrackingAreaOptions = NSTrackingAreaOptions(rawValue: NSTrackingAreaOptions.mouseEnteredAndExited.rawValue | NSTrackingAreaOptions.activeAlways.rawValue)
         trackingArea = NSTrackingArea(rect: self.bounds, options: opts, owner: self, userInfo: nil)
         if let trackingArea = trackingArea {
             self.addTrackingArea(trackingArea)
