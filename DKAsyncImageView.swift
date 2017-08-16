@@ -2,7 +2,7 @@
 //  DKAsyncImageView.swift
 //  The MIT License (MIT)
 //
-//  Copyright (c) 2014-2016 David Kopec
+//  Copyright (c) 2014-2017 David Kopec
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -78,10 +78,10 @@ open class DKAsyncImageView: NSImageView, URLSessionDelegate, URLSessionDownload
                 spinningWheel = NSProgressIndicator()
                 if let spinningWheel = spinningWheel {
                     addSubview(spinningWheel)
-                    spinningWheel.style = NSProgressIndicatorStyle.spinningStyle
+                    spinningWheel.style = NSProgressIndicator.Style.spinning
                     spinningWheel.isDisplayedWhenStopped = false
                     spinningWheel.frame = NSMakeRect(self.frame.size.width * 0.5 - 16, self.frame.size.height * 0.5 - 16, 32, 32)
-                    spinningWheel.controlSize = NSControlSize.regular
+                    spinningWheel.controlSize = NSControl.ControlSize.regular
                     spinningWheel.startAnimation(self)
                 }
                 
@@ -89,10 +89,10 @@ open class DKAsyncImageView: NSImageView, URLSessionDelegate, URLSessionDownload
                 spinningWheel = NSProgressIndicator()
                 if let spinningWheel = spinningWheel {
                     addSubview(spinningWheel)
-                    spinningWheel.style = NSProgressIndicatorStyle.spinningStyle
+                    spinningWheel.style = NSProgressIndicator.Style.spinning
                     spinningWheel.isDisplayedWhenStopped = false
                     spinningWheel.frame = NSMakeRect(self.frame.size.width * 0.5 - 8, self.frame.size.height * 0.5 - 8, 16, 16)
-                    spinningWheel.controlSize = NSControlSize.small
+                    spinningWheel.controlSize = NSControl.ControlSize.small
                     spinningWheel.startAnimation(self)
                 }
             }
@@ -224,7 +224,7 @@ open class DKAsyncImageView: NSImageView, URLSessionDelegate, URLSessionDownload
             removeTrackingArea(trackingArea)
         }
         
-        let opts: NSTrackingAreaOptions = NSTrackingAreaOptions(rawValue: NSTrackingAreaOptions.mouseEnteredAndExited.rawValue | NSTrackingAreaOptions.activeAlways.rawValue)
+        let opts: NSTrackingArea.Options = NSTrackingArea.Options(rawValue: NSTrackingArea.Options.mouseEnteredAndExited.rawValue | NSTrackingArea.Options.activeAlways.rawValue)
         trackingArea = NSTrackingArea(rect: self.bounds, options: opts, owner: self, userInfo: nil)
         if let trackingArea = trackingArea {
             self.addTrackingArea(trackingArea)
