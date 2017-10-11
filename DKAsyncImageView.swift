@@ -38,6 +38,8 @@ open class DKAsyncImageView: NSImageView, URLSessionDelegate, URLSessionDownload
     var userDidCancel: Bool = false
     var didFailLoadingImage: Bool = false
     
+    var completionHandler: ((Data?, Error?) -> Void)?
+    
     fileprivate var toolTipWhileLoading: String?
     fileprivate var toolTipWhenFinished: String?
     fileprivate var toolTipWhenFinishedWithError: String?
@@ -52,9 +54,11 @@ open class DKAsyncImageView: NSImageView, URLSessionDelegate, URLSessionDownload
     /// - parameter placeHolderImage: an optional NSImage to temporarily display while the image is downloading
     /// - parameter errorImage: an optional NSImage that displays if the download fails.
     /// - parameter usesSpinningWheel: A Bool that determines whether or not a spinning wheel indicator displays during download
-    open func downloadImageFromURL(_ url: String, placeHolderImage:NSImage? = nil, errorImage:NSImage? = nil, usesSpinningWheel: Bool = false) {
+    /// - parameter completion: A block to be executed when the download task finishes. The block takes two optional parameters: Data and Error and has no return value.
+    open func downloadImageFromURL(_ url: String, placeHolderImage:NSImage? = nil, errorImage:NSImage? = nil, usesSpinningWheel: Bool = false, completion: ((Data?, Error?) -> Void)? = nil) {
         cancelDownload()
         
+        completionHandler = completion
         isLoadingImage = true
         didFailLoadingImage = false
         userDidCancel = false
@@ -145,22 +149,26 @@ open class DKAsyncImageView: NSImageView, URLSessionDelegate, URLSessionDownload
         guard error == nil else {
             Swift.print(error!.localizedDescription)
             failureReset()
+            completionHandler?(nil, error)
             return;
         }
-            
-            
+        
+        
         didFailLoadingImage = false
         userDidCancel = false
         guard let data = imageDownloadData else {
             Swift.print("Image data not downloaded correctly.")
             failureReset()
+            completionHandler?(nil, error)
             return;
         }
         guard let img: NSImage = NSImage(data: data) else {
             Swift.print("Error forming image from data.")
             failureReset()
+            completionHandler?(nil, error)
             return;
         }
+        
         image = img
         isLoadingImage = false
         
@@ -169,7 +177,8 @@ open class DKAsyncImageView: NSImageView, URLSessionDelegate, URLSessionDownload
         imageDownloadData = nil
         imageURLDownloadTask = nil
         errorImage = nil
-
+        
+        completionHandler?(data, nil)
     }
     
     //MARK: Tooltips
