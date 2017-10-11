@@ -54,6 +54,7 @@ open class DKAsyncImageView: NSImageView, URLSessionDelegate, URLSessionDownload
     /// - parameter placeHolderImage: an optional NSImage to temporarily display while the image is downloading
     /// - parameter errorImage: an optional NSImage that displays if the download fails.
     /// - parameter usesSpinningWheel: A Bool that determines whether or not a spinning wheel indicator displays during download
+    /// - parameter completion: A block to be executed when the download task finishes. The block takes two optional parameters: Data and Error and has no return value.
     open func downloadImageFromURL(_ url: String, placeHolderImage:NSImage? = nil, errorImage:NSImage? = nil, usesSpinningWheel: Bool = false, completion: ((Data?, Error?) -> Void)? = nil) {
         cancelDownload()
         
