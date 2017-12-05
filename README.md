@@ -18,7 +18,7 @@ Documentation
 ----------------
 Include `DKAsyncImageView.swift` in your project or use the CocoaPod `DKAsyncImageView`. Set an IB NSImageView's class as DKAsyncImageView or create it programmatically. In the latter case, use the standard NSImageView init methods. 
 
-> Note: DKAsyncImageView 1.0.3 support Swift 4. Version 1.0.2 supports Swift 3. Version 1.0.1 supports Swift 2. Version 1.0 supports Swift 1.2.
+> Note: DKAsyncImageView 1.0.3 supports Swift 4. Version 1.0.2 supports Swift 3. Version 1.0.1 supports Swift 2. Version 1.0 supports Swift 1.2.
 
 **Download an Image**
 ```
