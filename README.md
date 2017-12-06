@@ -1,7 +1,7 @@
 DKAsyncImageView
 ================
 
-![Swift Versions](https://img.shields.io/badge/Swift-1%2C2%2C3%2C4-green.svg)](https://swift.org)
+[![Swift Versions](https://img.shields.io/badge/Swift-1%2C2%2C3%2C4-green.svg)](https://swift.org)
 [![CocoaPods Version](https://img.shields.io/cocoapods/v/DKAsyncImageView.svg)](https://cocoapods.org/pods/DKAsyncImageView)
 [![CocoaPods Platforms](https://img.shields.io/cocoapods/p/DKAsyncImageView.svg)](https://cocoapods.org/pods/DKAsyncImageView)
 [![Twitter Contact](https://img.shields.io/badge/contact-@davekopec-blue.svg?style=flat)](https://twitter.com/davekopec)
