@@ -1,6 +1,11 @@
 DKAsyncImageView
 ================
 
+[![Swift Versions](https://img.shields.io/badge/Swift-1%2C2%2C3%2C4-green.svg)](https://swift.org)
+[![CocoaPods Version](https://img.shields.io/cocoapods/v/DKAsyncImageView.svg)](https://cocoapods.org/pods/DKAsyncImageView)
+[![CocoaPods Platforms](https://img.shields.io/cocoapods/p/DKAsyncImageView.svg)](https://cocoapods.org/pods/DKAsyncImageView)
+[![Twitter Contact](https://img.shields.io/badge/contact-@davekopec-blue.svg?style=flat)](https://twitter.com/davekopec)
+
 DKAsyncImageView is a Swift subclass of NSImageView for loading remote images asynchronously and displaying them on OS X.
 
 This class is a port of [PVAsyncImageView](https://github.com/pedrovieira7/PVAsyncImageView) by [@pedrovieira7](https://github.com/pedrovieira7) from Objective-C to Swift. The features are the same, and re-enumerated here.
@@ -18,7 +23,7 @@ Documentation
 ----------------
 Include `DKAsyncImageView.swift` in your project or use the CocoaPod `DKAsyncImageView`. Set an IB NSImageView's class as DKAsyncImageView or create it programmatically. In the latter case, use the standard NSImageView init methods. 
 
-> Note: DKAsyncImageView 1.0.3 support Swift 4. Version 1.0.2 supports Swift 3. Version 1.0.1 supports Swift 2. Version 1.0 supports Swift 1.2.
+> Note: DKAsyncImageView 1.0.3 supports Swift 4. Version 1.0.2 supports Swift 3. Version 1.0.1 supports Swift 2. Version 1.0 supports Swift 1.2.
 
 **Download an Image**
 ```
