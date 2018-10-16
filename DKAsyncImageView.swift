@@ -22,12 +22,24 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
+import Foundation
 import Cocoa
 
 /// A Swift subclass of NSImageView for loading remote images asynchronously.
 open class DKAsyncImageView: NSImageView, URLSessionDelegate, URLSessionDownloadDelegate {
+    
+    enum DownloadTaskResponse {
+        case success(_ image: Data)
+        case failure(_ error: Error?)
+    }
+    
+    fileprivate var networkSession: URLSession {
+        return currentNetworkSession ??
+            URLSession.init(configuration:URLSessionConfiguration.default, delegate: self, delegateQueue: OperationQueue.main)
+    }
+    fileprivate var currentNetworkSession: URLSession?
+    
     fileprivate var imageURLDownloadTask: URLSessionDownloadTask?
-    fileprivate var networkSession: Foundation.URLSession?
     fileprivate var imageDownloadData: Data?
     fileprivate var errorImage: NSImage?
     
@@ -39,6 +51,10 @@ open class DKAsyncImageView: NSImageView, URLSessionDelegate, URLSessionDownload
     var didFailLoadingImage: Bool = false
     
     var completionHandler: ((Data?, Error?) -> Void)?
+    
+    fileprivate var attemptCompletionHandler: (DownloadTaskResponse) -> Void? { return respondToDownloadAttempt(withResponse:) }
+    fileprivate var downloadTaskAttemptLimit: Int = 0
+    fileprivate var downloadTaskAttempts: Int = 0
     
     fileprivate var toolTipWhileLoading: String?
     fileprivate var toolTipWhenFinished: String?
@@ -55,10 +71,11 @@ open class DKAsyncImageView: NSImageView, URLSessionDelegate, URLSessionDownload
     /// - parameter errorImage: an optional NSImage that displays if the download fails.
     /// - parameter usesSpinningWheel: A Bool that determines whether or not a spinning wheel indicator displays during download
     /// - parameter completion: A block to be executed when the download task finishes. The block takes two optional parameters: Data and Error and has no return value.
-    open func downloadImageFromURL(_ url: String, placeHolderImage:NSImage? = nil, errorImage:NSImage? = nil, usesSpinningWheel: Bool = false, completion: ((Data?, Error?) -> Void)? = nil) {
+    open func downloadImageFromURL(_ url: String, placeHolderImage:NSImage? = nil, errorImage:NSImage? = nil, usesSpinningWheel: Bool = false, allowedAttempts: Int = 0, completion: ((Data?, Error?) -> Void)? = nil) {
         cancelDownload()
         
         completionHandler = completion
+        downloadTaskAttemptLimit = allowedAttempts
         isLoadingImage = true
         didFailLoadingImage = false
         userDidCancel = false
@@ -73,10 +90,9 @@ open class DKAsyncImageView: NSImageView, URLSessionDelegate, URLSessionDownload
             return
         }
         
-        networkSession = Foundation.URLSession.init(configuration:URLSessionConfiguration.default, delegate: self, delegateQueue: OperationQueue.main)
-        imageURLDownloadTask = networkSession!.downloadTask(with: URL)
-        
+        imageURLDownloadTask = networkSession.downloadTask(with: URL)
         imageURLDownloadTask?.resume()
+        
         if usesSpinningWheel {
             if self.frame.size.height >= 64 && self.frame.size.width >= 64 {
                 spinningWheel = NSProgressIndicator()
@@ -108,14 +124,24 @@ open class DKAsyncImageView: NSImageView, URLSessionDelegate, URLSessionDownload
         userDidCancel = true
         isLoadingImage = false
         didFailLoadingImage = false
+
+        if let networkSession = currentNetworkSession {
+            networkSession.invalidateAndCancel()
+        }
+        
+        resetForNewTask()
+        image = nil
+    }
+    
+    fileprivate func resetForNewTask() {
+        imageDownloadData = nil
+        imageURLDownloadTask = nil
+        errorImage = nil
+        
+        downloadTaskAttempts = 0
         
         spinningWheel?.stopAnimation(self)
         spinningWheel?.removeFromSuperview()
-        networkSession?.invalidateAndCancel()
-        imageURLDownloadTask = nil
-        imageDownloadData = nil
-        errorImage = nil
-        image = nil
     }
     
     
@@ -124,20 +150,51 @@ open class DKAsyncImageView: NSImageView, URLSessionDelegate, URLSessionDownload
         didFailLoadingImage = true
         userDidCancel = false
         
-        spinningWheel?.stopAnimation(self)
-        spinningWheel?.removeFromSuperview()
-        
-        imageDownloadData = nil
-        imageURLDownloadTask = nil
+        networkSession.finishTasksAndInvalidate()
         
         image = errorImage
-        errorImage = nil
+        resetForNewTask()
+    }
+    
+    // MARK: Intermediate completion handler
+    
+    open func respondToDownloadAttempt(withResponse response: DownloadTaskResponse) {
+        
+        switch response {
+            
+        case .success(let data):
+            Swift.print("Image download task successful with URL.")
+            isLoadingImage = false
+            networkSession.finishTasksAndInvalidate()
+            resetForNewTask()
+            completionHandler?(data, nil)
+            return
+            
+        case .failure(let error):
+            if downloadTaskAttempts >= downloadTaskAttemptLimit {
+                Swift.print("Image download task exceeded retry attempts.")
+                image = errorImage
+                completionHandler?(nil, error)
+                failureReset()
+                return
+            }
+            
+            downloadTaskAttempts += 1
+            Swift.print("Image download task retrying attempt \(downloadTaskAttempts) / \(downloadTaskAttemptLimit).")
+        }
+        
+        guard let url = imageURLDownloadTask?.originalRequest?.url else {
+            NSLog("Error: malformed URL passed to downloadImageFromURL internal retry.")
+            return
+        }
+        
+        imageURLDownloadTask = networkSession.downloadTask(with: url)
+        imageURLDownloadTask?.resume()
     }
     
     //MARK: NSURLSessionDownloadTask Delegate
     
     open func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didFinishDownloadingTo location: URL) {
-        
         
         imageDownloadData = try? Data.init(contentsOf: location)
     }
@@ -147,38 +204,31 @@ open class DKAsyncImageView: NSImageView, URLSessionDelegate, URLSessionDownload
     open func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError error: Error?) {
         
         guard error == nil else {
+            if (error as NSError?)?.code == NSURLErrorCancelled {
+                return
+            }
             Swift.print(error!.localizedDescription)
-            failureReset()
-            completionHandler?(nil, error)
-            return;
+            attemptCompletionHandler(.failure(error))
+            return
         }
-        
         
         didFailLoadingImage = false
         userDidCancel = false
+        
         guard let data = imageDownloadData else {
             Swift.print("Image data not downloaded correctly.")
-            failureReset()
-            completionHandler?(nil, error)
+            attemptCompletionHandler(.failure(error))
             return;
         }
         guard let img: NSImage = NSImage(data: data) else {
             Swift.print("Error forming image from data.")
-            failureReset()
-            completionHandler?(nil, error)
+            attemptCompletionHandler(.failure(error))
             return;
         }
         
         image = img
-        isLoadingImage = false
         
-        spinningWheel?.stopAnimation(self)
-        spinningWheel?.removeFromSuperview()
-        imageDownloadData = nil
-        imageURLDownloadTask = nil
-        errorImage = nil
-        
-        completionHandler?(data, nil)
+        attemptCompletionHandler(.success(data))
     }
     
     //MARK: Tooltips
