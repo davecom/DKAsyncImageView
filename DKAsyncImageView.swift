@@ -22,6 +22,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
+import Foundation
 import Cocoa
 
 /// A Swift subclass of NSImageView for loading remote images asynchronously.
@@ -132,7 +133,7 @@ open class DKAsyncImageView: NSImageView, URLSessionDelegate, URLSessionDownload
         image = nil
     }
     
-    private func resetForNewTask() {
+    fileprivate func resetForNewTask() {
         imageDownloadData = nil
         imageURLDownloadTask = nil
         errorImage = nil
@@ -157,16 +158,16 @@ open class DKAsyncImageView: NSImageView, URLSessionDelegate, URLSessionDownload
     
     // MARK: Intermediate completion handler
     
-    func respondToDownloadAttempt(withResponse response: DownloadTaskResponse) {
+    open func respondToDownloadAttempt(withResponse response: DownloadTaskResponse) {
         
         switch response {
             
-        case .success(let image):
+        case .success(let data):
             Swift.print("Image download task successful with URL.")
             isLoadingImage = false
             networkSession.finishTasksAndInvalidate()
             resetForNewTask()
-            completionHandler?(image, nil)
+            completionHandler?(data, nil)
             return
             
         case .failure(let error):
