@@ -28,7 +28,7 @@ import Cocoa
 /// A Swift subclass of NSImageView for loading remote images asynchronously.
 open class DKAsyncImageView: NSImageView, URLSessionDelegate, URLSessionDownloadDelegate {
     
-    enum DownloadTaskResponse {
+    public enum DownloadTaskResponse {
         case success(_ image: Data)
         case failure(_ error: Error?)
     }
