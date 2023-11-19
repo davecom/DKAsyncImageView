@@ -10,7 +10,7 @@ Pod::Spec.new do |s|
 
   s.swift_versions = ['4.0', '5.0']
   
-  s.osx.deployment_target = '10.9'
+  s.osx.deployment_target = '10.13'
 
   s.source_files = 'Sources/DKAsyncImageView/DKAsyncImageView.swift'
   s.requires_arc = true
